@@ -65,12 +65,13 @@ class SiteController extends Controller
 
             $typeTd = $tr->childNodes[2];
             $lastTd = $tr->childNodes[$countChild - 1];
+            $lastTdValue = self::clearValue($lastTd->nodeValue);
 
-            if ($typeTd->nodeValue !== 'balance' && is_numeric($lastTd->nodeValue)) {
+            if ($typeTd->nodeValue !== 'balance' && is_numeric($lastTdValue)) {
                 $commissionTd = $tr->childNodes[$countChild - $posCommission];
 
-                $curProfit = (float) $lastTd->nodeValue;
-                $curCommission = abs((float) $commissionTd->nodeValue);
+                $curProfit = (float) $lastTdValue;
+                $curCommission = abs((float) self::clearValue($commissionTd->nodeValue));
 
                 $profit += $curProfit;
                 $commission += $curCommission;
@@ -84,5 +85,17 @@ class SiteController extends Controller
         } // end foreach ($rows as $tr)
 
         return $data;
+    }
+
+    /**
+     * Return clear value from spaces.
+     *
+     * @param string $value Value for clear.
+     *
+     * @return mixed Clear value from spaces.
+     */
+    private static function clearValue($value)
+    {
+        return str_replace(' ', '', $value);
     }
 }
