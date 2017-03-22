@@ -50,6 +50,14 @@ $this->title = \Yii::t('app', 'Report generation');
                         borderColor: "rgba(153, 102, 255, 1)",
                         data: [<?=implode(', ', $chartData['balance'])?>],
                         radius: 0
+                    },
+                    {
+                        label: "<?= \Yii::t('app', 'Swap') ?>",
+                        fill: false,
+                        backgroundColor: "rgba(54, 162, 235, 0.4)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        data: [<?=implode(', ', $chartData['swap'])?>],
+                        radius: 0
                     }
                 ]
             },

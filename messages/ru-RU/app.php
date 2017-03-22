@@ -8,4 +8,5 @@ return [
     'Commission' => 'Комиссия',
     'Balance' => 'Баланс',
     'Report generation' => 'Формирование отчёта',
+    'Swap' => 'Своп',
 ];

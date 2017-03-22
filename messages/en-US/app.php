@@ -8,4 +8,5 @@ return [
     'Commission' => 'Commission',
     'Balance' => 'Balance',
     'Report generation' => 'Report generation',
+    'Swap' => 'Swap',
 ];

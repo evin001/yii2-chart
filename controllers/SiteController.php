@@ -42,14 +42,20 @@ class SiteController extends Controller
     private function handleReport($file)
     {
         $html = \phpQuery::newDocumentFileHTML($file);
+
         $rows = $html->find('tr');
 
+        // Init
         $profit = 0;
         $commission = 0;
-        $balance = 0;
+        $swap = 0;
+        $balance = self::getBalance($html);
 
-        // Commission position in table
+        // Elements position
         $posCommission = 4;
+        $posSwap = 2;
+        $posType = 2;
+        $posProfit = 1;
 
         $data = [];
 
@@ -63,28 +69,56 @@ class SiteController extends Controller
 
             $countChild = $tr->childNodes->length;
 
-            $typeTd = $tr->childNodes[2];
-            $lastTd = $tr->childNodes[$countChild - 1];
+            $typeTd = $tr->childNodes[$posType];
+            $lastTd = $tr->childNodes[$countChild - $posProfit];
             $lastTdValue = self::clearValue($lastTd->nodeValue);
 
             if ($typeTd->nodeValue !== 'balance' && is_numeric($lastTdValue)) {
                 $commissionTd = $tr->childNodes[$countChild - $posCommission];
+                $swapTd = $tr->childNodes[$countChild - $posSwap];
 
                 $curProfit = (float) $lastTdValue;
                 $curCommission = abs((float) self::clearValue($commissionTd->nodeValue));
+                $curSwap = abs((float) self::clearValue($swapTd->nodeValue));
 
                 $profit += $curProfit;
                 $commission += $curCommission;
-                $balance += $curProfit - $curCommission;
+                $swap += $curSwap;
+                $balance += $curProfit - $curCommission - $curSwap;
 
                 $data['label'][] = '"'.$firstTd->nodeValue.'"';
                 $data['profit'][] = $profit;
                 $data['commission'][] = $commission;
+                $data['swap'][] = $swap;
                 $data['balance'][] = $balance;
             }
         } // end foreach ($rows as $tr)
 
         return $data;
+    }
+
+    /**
+     * @param \phpQueryObject $html
+     *
+     * @return mixed
+     */
+    private static function getBalance(\phpQueryObject $html)
+    {
+        $balance = 0;
+
+        $depositLabel = $html->find('td:contains("Deposit/Withdrawal")');
+        foreach ($depositLabel as $label) {
+            $childNodes = $label->parentNode->childNodes;
+            foreach ($childNodes as $childNode) {
+                $clearValue = self::clearValue($childNode->nodeValue);
+                if (is_numeric($clearValue)) {
+                    $balance = $clearValue;
+                    break;
+                }
+            }
+        }
+
+        return $balance;
     }
 
     /**
