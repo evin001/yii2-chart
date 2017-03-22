@@ -20,15 +20,18 @@ class SiteController extends Controller
     {
         $model = new ReportForm();
         $chartData = [];
+        $isPost = false;
 
         if (Yii::$app->request->isPost) {
             $model->reportFile = UploadedFile::getInstance($model, 'reportFile');
             $chartData = $this->handleReport($model->reportFile->tempName);
+            $isPost = true;
         }
 
         return $this->render('index', [
             'model'     => $model,
             'chartData' => $chartData,
+            'isPost'    => $isPost,
         ]);
     }
 

@@ -14,7 +14,7 @@ $this->title = \Yii::t('app', 'Report generation');
 
 <?php ActiveForm::end() ?>
 
-<?php if ($chartData): ?>
+<?php if ($chartData) { ?>
     <h1><?= \Yii::t('app', 'Balance sheet') ?></h1>
     <canvas id="lineChart" height="500" width="500"></canvas>
 
@@ -33,7 +33,7 @@ $this->title = \Yii::t('app', 'Report generation');
                         backgroundColor: "rgba(75, 192, 192, 0.4)",
                         borderColor: "rgba(75, 192, 192, 1)",
                         data: [<?=implode(', ', $chartData['profit'])?>],
-                        radius: 0
+                        radius: 2
                     },
                     {
                         label: "<?= \Yii::t('app', 'Commission') ?>",
@@ -41,7 +41,7 @@ $this->title = \Yii::t('app', 'Report generation');
                         backgroundColor: "rgba(255, 99, 132, 0.4)",
                         borderColor: "rgba(255, 99, 132, 1)",
                         data: [<?=implode(', ', $chartData['commission'])?>],
-                        radius: 0
+                        radius: 2
                     },
                     {
                         label: "<?= \Yii::t('app', 'Balance') ?>",
@@ -49,7 +49,7 @@ $this->title = \Yii::t('app', 'Report generation');
                         backgroundColor: "rgba(153, 102, 255, 0.4)",
                         borderColor: "rgba(153, 102, 255, 1)",
                         data: [<?=implode(', ', $chartData['balance'])?>],
-                        radius: 0
+                        radius: 2
                     },
                     {
                         label: "<?= \Yii::t('app', 'Swap') ?>",
@@ -57,11 +57,14 @@ $this->title = \Yii::t('app', 'Report generation');
                         backgroundColor: "rgba(54, 162, 235, 0.4)",
                         borderColor: "rgba(54, 162, 235, 1)",
                         data: [<?=implode(', ', $chartData['swap'])?>],
-                        radius: 0
+                        radius: 2
                     }
                 ]
             },
             options: {}
         });
     </script>
-<?php endif?>
+<?php } elseif ($isPost) { ?>
+    <h2><?= \Yii::t('app', 'Error') ?></h2>
+    <div class="alert alert-danger"><?= \Yii::t('app', 'Data not found') ?></div>
+<?php } ?>

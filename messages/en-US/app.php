@@ -9,4 +9,6 @@ return [
     'Balance' => 'Balance',
     'Report generation' => 'Report generation',
     'Swap' => 'Swap',
+    'Data not found' => 'Data for the formation of the report were not found',
+    'Error' => 'Error',
 ];
